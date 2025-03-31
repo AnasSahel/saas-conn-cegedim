@@ -46,7 +46,7 @@ export class CegedimClient {
     }
 
     private async callReadDossierSalarie(
-        popu: string,
+        popu: string | string[],
         range: [string | Date, string | Date],
         maxctr?: number,
         cursplit?: number
@@ -84,7 +84,7 @@ export class CegedimClient {
         const jsonResponse = JSON.parse(text.substring(1, text.length - 1));
 
         if (jsonResponse.error) {
-            throw new ConnectorError(`saas-conn-cegedim: ${jsonResponse.error.join('\n')}`);
+            throw new ConnectorError(`saas-conn-cegedim: ${jsonResponse.error.join(', ')}`);
         }
 
         return jsonResponse.response;
@@ -122,17 +122,18 @@ export class CegedimClient {
 
     async getAccount(identity: string) {
         const { ddeb, dfin } = this.getDateRange();
-        const response = await this.callReadDossierSalarie(`[${identity}]`, [ddeb, dfin]);
+        const response = await this.callReadDossierSalarie([identity], [ddeb, dfin]);
 
-        if (response && response.length > 0) {
-            return response[0];
+        if (response && response.popu && response.popu.length > 0) {
+            return response.popu[0];
         } else {
             return null;
         }
     }
 
     async testConnection(): Promise<{}> {
-        await this.callReadDossierSalarie('$all', ['1900-01-01', new Date()], 1, 1);
+        const { ddeb, dfin } = this.getDateRange();
+        await this.callReadDossierSalarie('$all', [ddeb, dfin], 1, 1);
         return {};
     }
 }

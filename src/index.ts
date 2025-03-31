@@ -6,6 +6,8 @@ import {
     Response,
     StdAccountListInput,
     StdAccountListOutput,
+    StdAccountReadInput,
+    StdAccountReadOutput,
     StdTestConnectionInput,
     StdTestConnectionOutput,
 } from '@sailpoint/connector-sdk';
@@ -46,24 +48,16 @@ export const connector = async () => {
                 }
             }
             logger.info(`saas-conn-cegedim:stdAccountList: stdAccountList sent ${accounts.length} accounts`);
-        });
-    // .stdAccountRead(async (context: Context, input: StdAccountReadInput, res: Response<StdAccountReadOutput>) => {
-    //     const cegedimAccount = await client.getAccount(input.identity);
+        })
+        .stdAccountRead(async (context: Context, input: StdAccountReadInput, res: Response<StdAccountReadOutput>) => {
+            const cegedimAccount = await client.getAccount(input.identity);
 
-    //     try {
-    //         const account = fromCegedimResponse(cegedimAccount, 'current');
-    //         res.send({
-    //             key: SimpleKey(account.mmat.toString()),
-    //             identity: account.mmat.toString(),
-    //             attributes: {
-    //                 mmat: account.mmat,
-    //                 s1ide_prenom1: account.s1ide_prenom1,
-    //                 s1ide_nom1: account.s1ide_nom1,
-    //             },
-    //         });
-    //         logger.info(`saas-conn-cegedim:stdAccountRead: stdAccountRead read account : ${input.identity}`);
-    //     } catch (error) {
-    //         logger.error(`saas-conn-cegedim:stdAccountRead: Error parsing account data: ${error}`);
-    //     }
-    // });
+            try {
+                const sailPointAccount = toSailPointObject(cegedimAccount);
+                res.send(sailPointAccount);
+                logger.info(`saas-conn-cegedim:stdAccountRead: stdAccountRead read account : ${input.identity}`);
+            } catch (error) {
+                logger.error(`saas-conn-cegedim:stdAccountRead: Error parsing account data: ${error}`);
+            }
+        });
 };
