@@ -7,10 +7,8 @@ const WSC_CONF_READ_DOSSIER_SALARIE = 'wsc_readDossierSalarie';
 
 export class CegedimClient {
     private readonly config: ConfigType;
-    private readonly MAX_ITERATIONS = 100;
-    private readonly PAGE_SIZE = 500;
 
-    constructor(config: any) {
+    constructor(config: unknown) {
         const parsedConfig = configSchema.safeParse(config);
         if (!parsedConfig.success) {
             throw new ConnectorError(`saas-conn-cegedim: config must be valid: ${parsedConfig.error}`);
@@ -29,13 +27,20 @@ export class CegedimClient {
         return `${code}${salt}${hash}`;
     }
 
-    private getDateRange() {
+    /**
+     * Calculates date range for API queries based on configuration settings.
+     * @returns {Object} Object with start date (ddeb) and end date (dfin)
+     */
+    private getDateRange(): { ddeb: Date; dfin: Date } {
         const today = new Date();
-        const ddeb = new Date(today.toString());
-        const dfin = new Date(today.toString());
 
-        ddeb.setMonth(ddeb.getMonth() - 2);
-        dfin.setMonth(dfin.getMonth() + 1);
+        // Create new date objects without using toString()
+        const ddeb = new Date(today);
+        const dfin = new Date(today);
+
+        // Adjust dates based on config
+        ddeb.setMonth(ddeb.getMonth() - this.config.ddebMin);
+        dfin.setMonth(dfin.getMonth() + this.config.dfinMax);
 
         return { ddeb, dfin };
     }
@@ -91,8 +96,8 @@ export class CegedimClient {
 
         let page = 1;
 
-        while (page <= this.MAX_ITERATIONS) {
-            const response = await this.callReadDossierSalarie('$all', [ddeb, dfin], this.PAGE_SIZE, page);
+        while (page <= this.config.maxIterations) {
+            const response = await this.callReadDossierSalarie('$all', [ddeb, dfin], this.config.pageSize, page);
             const popu = response.popu;
 
             if (page > 1 && accountList.length > 0) {

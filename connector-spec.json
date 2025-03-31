@@ -1,6 +1,12 @@
 {
     "name": "saas-conn-cegedim",
     "commands": ["std:account:list", "std:account:read", "std:test-connection"],
+    "sourceConfigInitialValues": {
+        "ddebMin": 2,
+        "dfinMax": 1,
+        "pageSize": 500,
+        "maxIterations": 100
+    },
     "sourceConfig": [
         {
             "type": "menu",
@@ -42,6 +48,44 @@
                             "type": "secret"
                         }
                     ]
+                },
+                {
+                    "type": "section",
+                    "sectionTitle": "Date Range",
+                    "sectionHelpMessage": "Specify the date range for employee contract retrieval",
+                    "items": [
+                        {
+                            "key": "ddebMin",
+                            "label": "Minimum Months Before Today",
+                            "required": true,
+                            "type": "number"
+                        },
+                        {
+                            "key": "dfinMax",
+                            "label": "Maximum Months After Today",
+                            "required": true,
+                            "type": "number"
+                        }
+                    ]
+                },
+                {
+                    "type": "section",
+                    "sectionTitle": "Pagination",
+                    "sectionHelpMessage": "Specify the pagination settings for retrieving employee contracts",
+                    "items": [
+                        {
+                            "key": "pageSize",
+                            "label": "Page Size (number of contracts in total)",
+                            "required": true,
+                            "type": "number"
+                        },
+                        {
+                            "key": "maxIterations",
+                            "label": "Number of iterations to retrieve all contracts or to stop at (watch out for performance)",
+                            "required": true,
+                            "type": "number"
+                        }
+                    ]
                 }
             ]
         }
@@ -51,9 +95,14 @@
         "identityAttribute": "mmat",
         "attributes": [
             {
-                "name": "s1ide_prenom1",
+                "name": "mmat",
                 "type": "string",
-                "description": "First name of the account"
+                "description": "Employee number"
+            },
+            {
+                "name": "s1ide_mmat",
+                "type": "string",
+                "description": "Employee number"
             },
             {
                 "name": "s1ide_nom1",
@@ -61,9 +110,144 @@
                 "description": "Last name of the account"
             },
             {
-                "name": "mmat",
+                "name": "s1ide_prenom1",
                 "type": "string",
-                "description": "Employee number"
+                "description": "First name of the account"
+            },
+            {
+                "name": "s1hier1_ismanager",
+                "type": "boolean",
+                "description": "Is the employee a manager?"
+            },
+            {
+                "name": "s1hier1_hmat",
+                "type": "string",
+                "description": "Manager's employee number"
+            },
+            {
+                "name": "s1refid_office_email",
+                "type": "string",
+                "description": "Email address of the employee"
+            },
+            {
+                "name": "employee_effdate",
+                "type": "string",
+                "description": "Effective date of the employee data"
+            },
+            {
+                "name": "s2eta_meta_val",
+                "type": "string",
+                "description": "Location code"
+            },
+            {
+                "name": "s2eta_meta_auto",
+                "type": "string",
+                "description": "Location label"
+            },
+            {
+                "name": "s1contrat_msoc_val",
+                "type": "string",
+                "description": "Company code"
+            },
+            {
+                "name": "s1contrat_msoc_auto",
+                "type": "string",
+                "description": "Company label"
+            },
+            {
+                "name": "s2typecontr_contratpartic_val",
+                "type": "string",
+                "description": "Contract type code"
+            },
+            {
+                "name": "s2typecontr_contratpartic_auto",
+                "type": "string",
+                "description": "Contract type label"
+            },
+            {
+                "name": "s2typecontr_contratpartic_mnemo",
+                "type": "string",
+                "description": "Contract type mnemonic"
+            },
+            {
+                "name": "s2typecontr_contratpartic_info",
+                "type": "string",
+                "description": "Contract type information"
+            },
+            {
+                "name": "s2typecontr_typcontrat_val",
+                "type": "string",
+                "description": "Contract type code"
+            },
+            {
+                "name": "s2typecontr_typcontrat_auto",
+                "type": "string",
+                "description": "Contract type label"
+            },
+            {
+                "name": "s2typecontr_typcontrat_mnemo",
+                "type": "string",
+                "description": "Contract type mnemonic"
+            },
+            {
+                "name": "s2societaire_annee",
+                "type": "string",
+                "description": "Shareholder since"
+            },
+            {
+                "name": "s2analyt_axe11_val",
+                "type": "string",
+                "description": "Analytical code"
+            },
+            {
+                "name": "s2analyt_axe11_auto",
+                "type": "string",
+                "description": "Analytical label"
+            },
+            {
+                "name": "s2analyt_axe11_mnemo",
+                "type": "string",
+                "description": "Analytical mnemonic"
+            },
+            {
+                "name": "s2emploi_cemploi_val",
+                "type": "string",
+                "description": "Job code"
+            },
+            {
+                "name": "s2emploi_cemploi_auto",
+                "type": "string",
+                "description": "Job label"
+            },
+            {
+                "name": "s2emploi_cemploi_mnemo",
+                "type": "string",
+                "description": "Job mnemonic"
+            },
+            {
+                "name": "s1contrat_ddeb",
+                "type": "string",
+                "description": "Contract start date"
+            },
+            {
+                "name": "s1contrat_dfin",
+                "type": "string",
+                "description": "Contract end date"
+            },
+            {
+                "name": "s2orggta_morg",
+                "type": "string",
+                "description": "Organization code"
+            },
+            {
+                "name": "s2orggta_morgpath",
+                "type": "string",
+                "description": "Organization path"
+            },
+            {
+                "name": "contract_effdate",
+                "type": "string",
+                "description": "Effective date of the contract"
             }
         ]
     },
