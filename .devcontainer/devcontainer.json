@@ -7,9 +7,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"esbenp.prettier-vscode",
-				"Orta.vscode-jest",
-				"Gruntfuggly.todo-tree"
+				"esbenp.prettier-vscode"
 			]
 		}
 	}
