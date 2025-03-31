@@ -1,0 +1,27 @@
+name: SailPoint SaaS Connector CI Workflow
+run-name: 🚀 ${{ github.run_id }} - ${{ github.event_name }} - ${{ github.actor }}
+
+on:
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    build-saans-connector:
+        runs-on: ubuntu-latest
+        steps:
+            - name: 'Checkout code'
+              uses: actions/checkout@v4
+            - name: 'Setup Node.js'
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+            - name: 'Install dependencies'
+              run: npm install
+            - name: 'Build the connector'
+              run: npm run pack-zip
+            - name: 'Upload SaaS Connector'
+              uses: actions/upload-artifact@v4
+              with:
+                  name: saas-conn-cegedim
+                  path: dist/saas-conn-cegedim-*.zip
