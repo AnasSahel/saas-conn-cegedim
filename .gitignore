@@ -17,3 +17,16 @@ node_modules/
 # Compiled source
 dist/
 coverage/
+
+# Ignore
+_ignore
+_ignore_*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variable files
+.env
+.env.*
