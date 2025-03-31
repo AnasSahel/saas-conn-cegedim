@@ -1,6 +1,6 @@
 {
     "name": "saas-conn-cegedim",
-    "version": "1.0.0-rc1",
+    "version": "1.0.0",
     "main": "dist/index.js",
     "scripts": {
         "clean": "shx rm -rf ./dist",
